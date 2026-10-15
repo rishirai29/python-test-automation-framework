@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block body %}
+<main>
+  <h1>Demo Shop</h1>
+  <form method="post" action="/login">
+    <p><input data-test="username" id="user-name" name="username" placeholder="Username"></p>
+    <p><input data-test="password" id="password" name="password" type="password" placeholder="Password"></p>
+    {% if error %}<h3 class="error" data-test="error">{{ error }}</h3>{% endif %}
+    <button data-test="login-button" id="login-button" type="submit">Login</button>
+  </form>
+</main>
+{% endblock %}

@@ -1,0 +1,7 @@
+[
+  {"id": "wrong-password",  "username": "standard_user",   "password": "wrong_pw",     "error": "Username and password do not match any user in this service"},
+  {"id": "unknown-user",    "username": "unknown_user",    "password": "Shop-Test#2026", "error": "Username and password do not match any user in this service"},
+  {"id": "locked-out-user", "username": "locked_out_user", "password": "Shop-Test#2026", "error": "Sorry, this user has been locked out."},
+  {"id": "empty-username",  "username": "",                "password": "Shop-Test#2026", "error": "Username is required"},
+  {"id": "empty-password",  "username": "standard_user",   "password": "",             "error": "Password is required"}
+]

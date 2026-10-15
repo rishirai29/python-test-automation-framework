@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+app/shop.db
+*.db
+.idea/
+.vscode/
+reports/*
+!reports/.gitkeep

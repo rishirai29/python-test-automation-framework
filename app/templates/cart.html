@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+{% set title = "Your Cart" %}
+{% include "_header.html" %}
+<main>
+  {% for p in items %}
+  <div class="cart-item" data-test="cart-item-{{ p.id }}">
+    <span class="item-name" data-test="cart-name-{{ p.id }}">{{ p.name }}</span>
+    <span class="item-price">${{ '%.2f'|format(p.price) }}</span>
+    <form class="inline" method="post" action="/cart/remove/{{ p.id }}">
+      <input type="hidden" name="next" value="/cart">
+      <button data-test="remove-{{ p.id }}" type="submit">Remove</button>
+    </form>
+  </div>
+  {% endfor %}
+  <p>Total: <strong data-test="cart-total">${{ '%.2f'|format(total) }}</strong></p>
+  <form method="post" action="/checkout">
+    <button data-test="checkout" type="submit" {{ 'disabled' if not items }}>Checkout</button>
+  </form>
+</main>
+{% endblock %}

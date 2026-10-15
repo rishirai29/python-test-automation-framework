@@ -1,0 +1,8 @@
+<header>
+  <strong data-test="title">{{ title }}</strong>
+  <nav>
+    <a data-test="inventory-link" href="/inventory">Products</a>
+    <a data-test="cart-link" href="/cart">Cart{% if cart|length %}<span class="badge" data-test="cart-badge">{{ cart|length }}</span>{% endif %}</a>
+    <a data-test="logout" href="/logout">Logout</a>
+  </nav>
+</header>

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+{% set title = "Checkout Complete" %}
+{% include "_header.html" %}
+<main>
+  <h2 data-test="complete-header">Thank you for your order!</h2>
+  <p>Order number: <span data-test="order-id">{{ order_id }}</span></p>
+</main>
+{% endblock %}

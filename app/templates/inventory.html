@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+{% set title = "Products" %}
+{% include "_header.html" %}
+<main>
+  <select data-test="sort" onchange="location.href='/inventory?sort='+this.value">
+    <option value="az" {{ 'selected' if sort=='az' }}>Name (A to Z)</option>
+    <option value="za" {{ 'selected' if sort=='za' }}>Name (Z to A)</option>
+    <option value="lohi" {{ 'selected' if sort=='lohi' }}>Price (low to high)</option>
+    <option value="hilo" {{ 'selected' if sort=='hilo' }}>Price (high to low)</option>
+  </select>
+  {% for p in products %}
+  <div class="inventory-item" data-test="item-{{ p.id }}">
+    <span class="item-name" data-test="name-{{ p.id }}">{{ p.name }}</span>
+    <span class="item-price" data-test="price-{{ p.id }}">${{ '%.2f'|format(p.price) }}</span>
+    {% if p.id in cart %}
+    <form class="inline" method="post" action="/cart/remove/{{ p.id }}">
+      <input type="hidden" name="next" value="/inventory?sort={{ sort }}">
+      <button data-test="remove-{{ p.id }}" type="submit">Remove</button>
+    </form>
+    {% else %}
+    <form class="inline" method="post" action="/cart/add/{{ p.id }}">
+      <input type="hidden" name="next" value="/inventory?sort={{ sort }}">
+      <button data-test="add-to-cart-{{ p.id }}" type="submit" {{ 'disabled' if p.stock == 0 }}>{{ 'Out of stock' if p.stock == 0 else 'Add to cart' }}</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endfor %}
+</main>
+{% endblock %}

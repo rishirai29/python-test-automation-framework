@@ -1,0 +1,8 @@
+[
+  {"id": 1, "name": "Backpack",      "price": 29.99, "stock": 10},
+  {"id": 2, "name": "Bike Light",    "price": 9.99,  "stock": 15},
+  {"id": 3, "name": "Bolt T-Shirt",  "price": 15.99, "stock": 20},
+  {"id": 4, "name": "Fleece Jacket", "price": 49.99, "stock": 5},
+  {"id": 5, "name": "Onesie",        "price": 7.99,  "stock": 25},
+  {"id": 6, "name": "Red T-Shirt",   "price": 15.99, "stock": 0}
+]
