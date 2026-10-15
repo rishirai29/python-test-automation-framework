@@ -67,8 +67,17 @@ pytest -m smoke                 # quick sanity set
 pytest -m "api or db"           # backend only
 pytest -m selenium              # Selenium UI only
 pytest tests/bdd                # BDD scenarios
-HEADLESS=false pytest -m web    # watch the browser (Windows PowerShell: $env:HEADLESS="false")
 ```
+
+Watch the browser (live demo):
+
+```bash
+pytest -m smoke --headed                          # show the browser window, slowed down so clicks are visible
+pytest -k checkout --headed --slow-mo 800         # slower: 800 ms before every browser action
+pytest -k test_checkout_shows_confirmation --keep-open   # leave the browser open after each UI test until you press Enter
+```
+
+`--keep-open` implies `--headed`. The same switches are available as environment variables: `HEADLESS=false`, `SLOWMO=800`, `KEEP_OPEN=true`.
 
 Reports are written to `reports/report.html` (self-contained) and `reports/junit.xml`.
 

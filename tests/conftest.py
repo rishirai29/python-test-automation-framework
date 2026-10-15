@@ -80,9 +80,39 @@ def auth_api(base_url):
     return ApiClient(base_url).authenticate(*config.VALID_USER)
 
 
+# --------------------------------------------------------------------------- live-demo helper
+def _pause_for_viewing(request) -> None:
+    """With --keep-open: leave the browser open after the test until the user presses Enter."""
+    if not config.KEEP_OPEN:
+        return
+    capman = request.config.pluginmanager.getplugin("capturemanager")
+    message = f"\n>>> '{request.node.name}' finished. Look at the browser, then press Enter to close it... "
+
+    def _ask():
+        print(message, end="", flush=True)
+        try:
+            sys.__stdin__.readline()  # the real keyboard input, even while pytest captures output
+        except (OSError, ValueError):
+            pass
+
+    if capman:
+        with capman.global_and_fixture_disabled():
+            _ask()
+    else:
+        _ask()
+
+
 # --------------------------------------------------------------------------- Selenium
+class _SlowChrome(webdriver.Chrome):
+    """Chrome that waits SLOWMO milliseconds before every command, so a live demo is easy to follow."""
+
+    def execute(self, driver_command, params=None):
+        time.sleep(config.SLOWMO_MS / 1000)
+        return super().execute(driver_command, params)
+
+
 @pytest.fixture
-def driver():
+def driver(request):
     options = Options()
     if config.HEADLESS:
         options.add_argument("--headless=new")
@@ -106,9 +136,11 @@ def driver():
     if config.CHROME_BIN:
         options.binary_location = config.CHROME_BIN
     service = Service(executable_path=config.CHROMEDRIVER_PATH) if config.CHROMEDRIVER_PATH else Service()
-    drv = webdriver.Chrome(options=options, service=service)
+    chrome_class = _SlowChrome if config.SLOWMO_MS else webdriver.Chrome
+    drv = chrome_class(options=options, service=service)
     drv.implicitly_wait(0)
     yield drv
+    _pause_for_viewing(request)
     drv.quit()
 
 
@@ -116,17 +148,18 @@ def driver():
 @pytest.fixture(scope="session")
 def pw_browser():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=config.HEADLESS, args=["--no-sandbox"])
+        browser = p.chromium.launch(headless=config.HEADLESS, args=["--no-sandbox"], slow_mo=config.SLOWMO_MS)
         yield browser
         browser.close()
 
 
 @pytest.fixture
-def pw_page(pw_browser):
+def pw_page(pw_browser, request):
     context = pw_browser.new_context(viewport={"width": 1280, "height": 900})
     context.set_default_timeout(config.TIMEOUT * 1000)
     page = context.new_page()
     yield page
+    _pause_for_viewing(request)
     context.close()
 
 

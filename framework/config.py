@@ -12,6 +12,8 @@ SCHEMA_DIR = ROOT / "schemas"
 EXTERNAL_BASE_URL = os.getenv("BASE_URL")
 HEADLESS = os.getenv("HEADLESS", "true").lower() != "false"
 TIMEOUT = int(os.getenv("TIMEOUT", "10"))
+SLOWMO_MS = int(os.getenv("SLOWMO", "0"))  # delay in ms before every browser action; use for live demos
+KEEP_OPEN = os.getenv("KEEP_OPEN", "false").lower() == "true"  # keep the browser open after each UI test
 CHROME_BIN = os.getenv("CHROME_BIN")            # optional custom Chrome/Chromium binary
 CHROMEDRIVER_PATH = os.getenv("CHROMEDRIVER_PATH")  # optional; Selenium Manager is used if unset
 
